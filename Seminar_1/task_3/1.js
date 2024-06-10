@@ -82,7 +82,6 @@ ulList.addEventListener("click", ({ target }) => {
     liItem.querySelector(".text").textContent = text;
   }
 }); // сюда передадим event, но весь event не нужен, а достать только target и путь такая переменная будет (деструктуризация)
-// console.log(art);
 
 // Кнопка добавления статьи (по данному принципу работает метод добавления товара в корзину)
 const addBtn = document.querySelector(".addnews-btn");
