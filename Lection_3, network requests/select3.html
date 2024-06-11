@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Интернет-магазин</title>
+  </head>
+  <body>
+    <h1>Список товаров</h1>
+    <label for="sort-select">Сортировка:</label>
+    <select id="sort-select">
+      <option value="asc">По возрастанию цены</option>
+      <option value="desc">По убыванию цены</option>
+    </select>
+
+    <ul id="product-list">
+      <li class="product-item">Товар 1 - $50</li>
+      <li class="product-item">Товар 2 - $30</li>
+      <li class="product-item">Товар 3 - $70</li>
+      <li class="product-item">Товар 4 - $20</li>
+    </ul>
+
+    <script>
+      const sortSelect = document.querySelector("#sort-select"); // получение ссылки на элемент select по его id
+      const productList = document.querySelector("#product-list"); // получение ссылки на список товаров по его id
+      const productItems = Array.from(
+        document.querySelectorAll(".product-item")
+      ); // получение ссылок на все элементы списка товаров
+
+      sortSelect.onchange = function () {
+        // Назначение обработчика события onchange для элемента select
+        const selectedOption = sortSelect.value; // Получение выбранной опции сортировки
+
+        // Сортировка списка товаров по цене
+        if (selectedOption === "asc") {
+          productItems.sort((a, b) => {
+            const priceA = parseInt(a.textContent.split("- $")[1]); // извлечение цены из текстового содержимого элемента
+            console.log(priceA);
+            const priceB = parseInt(b.textContent.split("- $")[1]); // извлечение цены из текстового содержимого элемента
+            console.log(priceB);
+            return priceA - priceB;
+          });
+        } else if (selectedOption === "desc") {
+          productItems.sort((a, b) => {
+            const priceA = parseInt(a.textContent.split("- $")[1]); // извлечение цены из текстового содержимого элемента
+            const priceB = parseInt(b.textContent.split("- $")[1]); // извлечение цены из текстового содержимого элемента
+            return priceB - priceA;
+          });
+        }
+
+        // Обновление порядка элементов в DOM
+        productItems.forEach((item) => productList.appendChild(item));
+      };
+    </script>
+  </body>
+</html>

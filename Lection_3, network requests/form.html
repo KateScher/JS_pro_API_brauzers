@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Формы</title>
+  </head>
+  <body>
+    <form name="superForm">
+      <input name="first" value="1000" />
+      <input name="second" value="999" />
+    </form>
+    <form name="superForm2">
+      <input name="first" value="200" />
+      <input name="second" value="199" />
+    </form>
+    <script>
+      console.log(document.forms.superForm);
+      console.log(document.forms[1]);
+
+      const form = document.forms.superForm;
+      console.log(form.elements.first);
+      console.log(form.elements.second);
+      form.elements.second.value = 777;
+    </script>
+  </body>
+</html>

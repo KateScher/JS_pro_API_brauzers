@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form name="superForm">
+      <select name="selectForm" multiple>
+        <option value="GeekBrains" selected>ГикБрейнс</option>
+        <option value="Skillbox">СкилБокс</option>
+        <option value="SkillFactory">Скилфэктори</option>
+      </select>
+    </form>
+
+    <script>
+      const select = document.forms.superForm.selectForm;
+      // следующие три строки делают одно и то же
+      // select.options[2].selected = true;
+      // select.selectedIndex = 2;
+      select.value = "SkillFactory";
+
+      const selected = Array.from(select.options)
+        .filter((option) => option.selected)
+        .map((option) => option.value);
+      console.log(selected);
+    </script>
+  </body>
+</html>
