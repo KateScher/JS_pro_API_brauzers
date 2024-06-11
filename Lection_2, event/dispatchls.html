@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Разграничение кликов</title>
+  </head>
+  <body>
+    <button id="btn">Нажми меня</button>
+
+    <script>
+      const button = document.querySelector("#btn");
+
+      button.addEventListener("click", function (event) {
+        if (event.isTrusted) {
+          console.log("Клик событие является доверенным");
+        } else {
+          console.log("Клик событие не является доверенным");
+        }
+      });
+
+      function simulateClick() {
+        const clickEvent = new Event("click", { bubbles: true });
+        button.dispatchEvent(clickEvent);
+      }
+
+      setTimeout(simulateClick, 2000); // Имитация клика через 2 секунды
+    </script>
+  </body>
+</html>

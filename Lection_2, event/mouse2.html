@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>События: мышь, клавиатура</title>
+  </head>
+  <body>
+    <div id="context-menu">
+      <!-- ul>li{list}*5 -->
+      <ul>
+        <li>list</li>
+        <li>list</li>
+        <li>list</li>
+        <li>list</li>
+        <li>list</li>
+      </ul>
+    </div>
+
+    <script>
+      const contextMenu = document.getElementById("context-menu");
+
+      // при клике мышью - меню исчезает
+      document.addEventListener("click", function (event) {
+        if (event.target !== contextMenu) {
+          // все кроме контекстного меню
+          contextMenu.style.display = "none";
+        }
+      });
+
+      // при нажатии клавиши "пробел" на клавиатуре, меню снова появится
+      document.addEventListener("keydown", function (event) {
+        if (event.code === "Space") {
+          // клавиша пробела
+          contextMenu.style.display = "block";
+        }
+      });
+    </script>
+  </body>
+</html>

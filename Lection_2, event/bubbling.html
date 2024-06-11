@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Погружение и всплытие</title>
+  </head>
+  <body>
+    <div>
+      <p>
+        <span style="background: red"> Click me! It's span</span>
+      </p>
+    </div>
+    <script>
+      for (let element of document.querySelectorAll("*")) {
+        // по всем элементам, где звездочка
+        // Погружение и всплытие
+        element.addEventListener(
+          "click",
+          function (e) {
+            console.log(`Погружение ${element.tagName}`);
+          },
+          true
+        );
+        element.addEventListener("click", function (e) {
+          console.log(`Всплытие ${element.tagName}`);
+        });
+      }
+    </script>
+  </body>
+</html>
