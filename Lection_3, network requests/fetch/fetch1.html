@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch</title>
+  </head>
+  <body>
+    <script>
+      // "use strict";
+      // // делается запрос к серверу, выдает код 200, true и каждый раз новые факты
+      // (async () => {
+      //   const url = "https://catfact.ninja/fact";
+      //   const response = await fetch(url);
+      //   console.log(response.status);
+      //   console.log(response.ok);
+      //   const fact = await response.json();
+      //   console.log(fact);
+      // })();
+
+      // response.json() - JSON,
+      // responce.text() - текст,
+      // responce.blob() = blob (бинарные данные с типом),
+      // responce.arrayBuffer() - низкоуровневое представление бинарных данных
+      // responce.formData() - объект FormData,
+      // responce.body - объект ReadableStream, с помощью которого можно считывать тело запроса по частям.
+
+      "use strict";
+      fetch("https://catfact.ninja/fact")
+        .then((responce) => responce.json())
+        .then(console.log);
+
+      // или для вывода только факта:
+      ("use strict");
+      fetch("https://catfact.ninja/fact")
+        .then((responce) => responce.json())
+        .then((obj) => console.log(obj.fact));
+    </script>
+  </body>
+</html>

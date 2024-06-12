@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>formData</title>
+  </head>
+  <body>
+    <form name="superForm">
+      title: <input name="title" value="test product" />
+      <br />
+      price: <input name="price" type="number" value="13.5" />
+      <br />
+      description: <input name="description" value="lorem ipsum set" />
+      <br />
+      image: <input name="image" value="https://i.pravatar.cc" />
+      <br />
+      category: <input name="category" value="electronic" />
+      <input type="submit" />
+    </form>
+    <script>
+      "use strict";
+      const form = document.forms.superForm;
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+
+        let responce = await fetch("https://fakestoreapi.com/products", {
+          method: "POST",
+          body: new FormData(form),
+        });
+
+        let result = await responce.json();
+
+        console.log(result);
+      };
+
+      (async () => {
+        // шаг 1: начинаем загрузку fetch, получаем поток для чтения
+        let responce = await fetch(
+          "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits?per_page=100"
+        );
+
+        const reader = responce.body.getReader();
+
+        // Шаг 2: считываем данные:
+        let receivedLength = 0; // кол-во байт, полученных на данный момент
+        let chunks = []; // массив полученных двоичных фрагментов (составляющих тело ответа)
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) break;
+
+          chunks.push(value);
+          receivedLength += value.length;
+
+          console.log(`Получено ${receivedLength} байт`);
+        }
+
+        // Шаг 3: соединим фрагменты в общий типизированный массив Uint8Array
+        let chunksAll = new Uint8Array(receivedLength);
+        let position = 0;
+        for (let chunk of chunks) {
+          chunksAll.set(chunk, position);
+          position += chunk.length;
+        }
+
+        // Шаг 4: декодируем Uint8Array обратно в строку
+        let result = new TextDecoder("utf-8").decode(chunksAll);
+
+        // Готово!
+        let commits = JSON.parse(result);
+        console.log(commits);
+      })();
+    </script>
+    <!-- formData.delete(name) - Удаляет поле с именем name,
+    formData.get(name) - возвращает значение поля с имененм name,
+    formData.has(name) - если существует поле с имененм name, то возвращает true, иначе false -->
+  </body>
+</html>

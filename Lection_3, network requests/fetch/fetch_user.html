@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Случайные пользователи</title>
+  </head>
+  <body>
+    <h1>Информация о случайных пользователях</h1>
+    <label for="sort-select">Сортировка:</label>
+    <select id="sort-select">
+      <option value="name">По имени</option>
+      <option value="age">По возрасту</option>
+    </select>
+    <div id="user-list"></div>
+
+    <script>
+      // получаем ссылки на элементы страницы
+      const userListElement = document.querySelector("#user-list");
+      const sortSelect = document.querySelector("#sort-select");
+
+      //Загружаем данные о случайных пользователях с помощью API
+      fetch("https://randomuser.me/api/?results=5")
+        .then((responce) => responce.json())
+        .then((data) => {
+          let users = data.results;
+          // преобразуем ответ в формат JSON и получаем массив с данными о пользователях.
+
+          // первоначальный вывод списка пользователей
+          renderUserList(users);
+
+          // обработчик события измененеия выбора в селекте
+          sortSelect.addEventListener("change", () => {
+            const selectedOption = sortSelect.value; // получаем выбранный параметр сортировки
+            users = sortUsers(users, selectedOption); // сортируем пользователей в соответствии с выбранным параметром
+            renderUserList(users); // выводим отсортированный список пользователей на страницу
+          });
+        })
+        .catch((error) => console.log(error));
+
+      // Функция для вывода списка пользователей на страницу
+      function renderUserList(users) {
+        // очищаем список пользователей перед выводом
+        userListElement.innerHTML = "";
+
+        // создаем элементы HTML для каждого пользователя и добавляем их в список
+        users.forEach((user) => {
+          const userElement = createUserElement(user);
+          userListElement.appendChild(userElement);
+        });
+      }
+
+      // Функция для создания элемента пользователя
+      function createUserElement(user) {
+        const userContainer = document.createElement("div");
+        userContainer.classList.add("user");
+
+        const userName = document.createElement("p");
+        userName.textContent = `Name: ${user.name.first} ${user.name.last}`;
+        userContainer.appendChild(userName);
+
+        const userAge = document.createElement("p");
+        userAge.textContent = `Age: ${user.dob.age}`;
+        userContainer.appendChild(userAge);
+
+        return userContainer;
+      }
+      // Функция для сортировки пользователей
+      function sortUsers(users, sortBy) {
+        return users.sort((a, b) => {
+          if (sortBy === "name") {
+            return a.name.first.localeCompare(b.name.first); // сортировка по имени с исопльзованием метода localeCompare()
+          } else if (sortBy === "age") {
+            return a.dob.age - b.dob.age;
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
