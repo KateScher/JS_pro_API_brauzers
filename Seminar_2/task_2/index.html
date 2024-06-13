@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seminar2</title>
+    <style>
+      .modal {
+        position: relative;
+        display: none;
+        border: 5px solid black;
+        margin-top: 20px;
+      }
+
+      .closebtn {
+        position: absolute;
+        right: 0;
+      }
+
+      .active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="openbtn" type="button">открыть модальное окно</button>
+    <div class="modal">
+      <button class="closebtn" type="button">закрыть модальное окно</button>
+      <h1>Привет</h1>
+    </div>
+    <script>
+      "use strict";
+
+      /* Задание 2.
+      Создайте простое модальное окно, которое появляется при клике на кнопку "Открыть модальное окно" и закрывается при клике на кнопку "Закрыть". Модальное окно должно содержать заголовок "Модальное окно" и кнопку для закрытия. Модальное окно должно
+      плавно появляться и исчезать при открытии и закрытии. */
+
+      const modalEl = document.querySelector(".modal");
+      const openBtnEl = document.querySelector(".openbtn");
+      const closeBtnEl = document.querySelector(".closebtn");
+
+      openBtnEl.addEventListener("click", () =>
+        modalEl.classList.add("active")
+      );
+
+      closeBtnEl.addEventListener("click", () =>
+        modalEl.classList.remove("active")
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modal Window</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .question {
+        margin-bottom: 20px;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+
+      .result {
+        font-weight: bold;
+      }
+
+      .not-checked {
+        border: 3px solid red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="question">
+      <p>Вопрос 1: Какой ваш любимый цвет?</p>
+      <div class="options">
+        <label> <input type="radio" name="q1" value="Синий" /> Синий </label>
+        <label>
+          <input type="radio" name="q1" value="Зеленый" /> Зеленый
+        </label>
+        <label>
+          <input type="radio" name="q1" value="Красный" /> Красный
+        </label>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>Вопрос 2: Какое ваше любимое животное?</p>
+      <div class="options">
+        <label> <input type="radio" name="q2" value="Собака" /> Собака </label>
+        <label> <input type="radio" name="q2" value="Кот" /> Кот </label>
+        <label>
+          <input type="radio" name="q2" value="Попугай" /> Попугай
+        </label>
+      </div>
+    </div>
+
+    <button id="submit">Завершить опрос</button>
+
+    <div class="result" style="display: none">
+      <p>Результаты:</p>
+      <div class="answers">
+        <p data-number="1">Вопрос 1: <span></span></p>
+        <p data-number="2">Вопрос 2: <span></span></p>
+      </div>
+    </div>
+    <script>
+      // Вам предоставляется задача создать простой онлайн опросник, который позволяет пользователям отвечать на вопросы с вариантами ответов. Ваша задача - разработать интерфейс и функциональность для этого опросника, используя HTML, CSS и JavaScript.
+      // 1. Создайте интерфейс с несколькими вопросами и вариантами ответов. Каждый вопрос должен иметь несколько вариантов ответов.
+      // 2. Реализуйте обработку событий, чтобы пользователи могли выбирать варианты ответов.
+      // 3. Добавьте кнопку "Завершить опрос", которая будет показывать результаты опроса.
+      // 4. При нажатии на кнопку "Завершить опрос", вы должны проверить, что пользователь ответил на все вопросы, и отобразить выбранные им варианты ответов.
+      // 5. Если пользователь не ответил на все вопросы, покажите ему сообщение о необходимости ответить на все вопросы перед завершением опроса.
+      // 6. По желанию можно добавить стилизацию опросника с использованием CSS для лучшего пользовательского опыта.
+
+      const questionEls = document.querySelectorAll(".question");
+      const submitBtn = document.getElementById("submit");
+      const resultEl = document.querySelector(".result");
+      const answersEl = document.querySelector(".answers");
+
+      submitBtn.addEventListener("click", () => {
+        const resultsHtml = []; // Инициализация массива с результатами
+        questionEls.forEach((questionEl, index) => {
+          const checkedInput = questionEl.querySelector("input:checked"); // ищем input, который checkнут
+          questionEl.classList.toggle("not-checked", !checkedInput); // если не выбран (не зачекнут) вопрос, по классу not-checked - выделяется красной линией (т.е. toggle - ставит класс, если его нет, и убирает, если он есть)
+          // Если пользователь выбрал ответ, т.е. input:checked, То ответы добавляем в resultHtml в виде строки
+          // если вопрос чекнут, то добавляем его в массив
+          if (checkedInput) {
+            resultsHtml.push(
+              `<p data-number="${index + 1}">Вопрос ${index + 1}: <span>${
+                checkedInput.value
+              }</span></p>`
+            );
+          }
+        });
+        // Проверяем, что пользователь ответил на все вопросы
+        if (resultsHtml.length === questionEls.length) {
+          // Если пользователь ответил на все вопросы, то отобразим результаты опроса, добавить массив ответов пользователя в answer
+          answersEl.innerHTML = resultsHtml.join("");
+          // убираем инлайновый стиль display
+          resultEl.style.removeProperty("display");
+          // Сделаем кнопку "Завершить опрос" не активной после ответов
+          submitBtn.disabled = true;
+        }
+      });
+    </script>
+  </body>
+</html>
