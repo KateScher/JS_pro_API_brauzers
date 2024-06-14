@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Бесконечная лента с фотографиями</title>
+    <style>
+      #photo-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .photo {
+        flex: 1 1 calc(33.33% - 20px);
+        margin: 10px;
+        border: 1px solid #ccc;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .photo img {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="photo-container"></div>
+
+    <script>
+      /* Задача 2.
+
+        Бесконечная лента фотографий
+        Для создания бесконечной ленты с фотографиями с использованием Unsplash API, выполните следующие шаги:
+        1. Зарегистрируйтесь на Unsplash:
+        ○ Перейдите на веб-сайт Unsplash (https://unsplash.com/).
+        ○ Нажмите кнопку "Join" или "Регистрация", чтобы создать аккаунт, если у вас его еще нет.
+        ○ Войдите в свой аккаунт Unsplash.
+
+        2. Создайте приложение:
+        ○ После входа в аккаунт Unsplash, перейдите на страницу разработчика Unsplash
+        (https://unsplash.com/developers).
+        ○ Нажмите на кнопку "Your apps".
+        ○ Нажмите "New Application" (Новое приложение).
+        ○ Заполните информацию о вашем приложении, такую как имя, описание и сайт (вы можете
+        использовать http://localhost для тестового сайта).
+        ○ После заполнения информации, нажмите "Create Application" (Создать приложение).
+
+        3. Получите API-ключ:
+        ○ После создания приложения, вы получите API-ключ. Этот ключ будет
+        отображаться в вашей панели управления приложением.
+        ○ API-ключ представляет собой строку вида YOUR_ACCESS_KEY.
+        Скопируйте его.
+        4. Измените код HTML и JavaScript:
+        ○ Откройте вашу HTML-страницу в текстовом редакторе или
+        интегрированной среде разработки.
+        ○ Замените 'YOUR_ACCESS_KEY' в коде JavaScript на ваш собственный
+        API-ключ.
+
+        5. Реализуйте загрузку фотографий при открытии страницы.
+
+        6. Реализуйте бесконечную подгрузку фотографий при прокручивании страницы.
+        */
+
+      // Вставить свой ТОКЕН!!!
+      const accessKey = ""; // Вставить свой ТОКЕН!!!
+      let isFetching = false; // Проиходит ли fetch запрос
+
+      // Создание fetch на получение 10-ти фото и параметром page с запрашиваемой страницей
+      const fetchPhotos = async (page) => {
+        // try catch использован только для того, что бы менять isFetching. Сама обработка ошибки происходит в функции, которая вызывает fetch
+        try {
+          const response = await fetch(
+            `https://api.unsplash.com/photos/?page=${page}&client_id=${accessKey}`
+          );
+          // Если не удалось совершить сам fetch, например нет интернета
+          if (!response.ok) {
+            throw new Error("Ошибка при загрузке данных");
+          }
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          throw error; // ошибка здесь не обрабатывается, он обрабатывается в методе где вызвана функция fetchPhotos
+        } finally {
+          isFetching = false;
+        }
+      };
+
+      let currentPage = 1; // Текущая страница
+
+      // Функция загружкается при старте страницы, она асинхронная, т.к. ждёт выполнения fatchPHotos
+      async function run() {
+        // Если произойдёт ошибка
+        try {
+          // Сохраняем в переменную массив объектов и fetch запроса для дальнейшей работы
+          const data = await fetchPhotos(currentPage); // (10) [{…}, {…}, {…}, {…}]
+          // Добавление фото на страницу
+          addPhotosInHTML(data);
+        } catch (error) {
+          // То результат ошибки вывети в созданный errorMessage
+          const errorMessage = document.createElement("div");
+          errorMessage.textContent = error.message;
+          document.querySelector("#photo-container").append(errorMessage);
+        }
+      }
+
+      run();
+
+      const photoContainer = document.querySelector("#photo-container");
+
+      // Функция создаёт HTML разметку для кадой фотографии из массива объектов и вставляет в photoContainer
+      function addPhotosInHTML(data) {
+        for (const obj of data) {
+          photoContainer.insertAdjacentHTML(
+            "beforeend",
+            `<div class="photo">
+              <img src="${obj.urls.full}" alt="${obj.alt_description}" />
+            </div>`
+          );
+        }
+      }
+
+      // Создание пагинации
+      // Создание события, что при скроле окна на 90% происходи запрос на новые фото
+      window.addEventListener("scroll", async () => {
+        // percentPage содержитт процент прокрутики скролла
+        const percentPage =
+          (window.scrollY / (document.body.clientHeight - window.innerHeight)) *
+          100;
+
+        // Ели процент прокрутки больше либо равен 90% и fetch не выполняется, (что бы не было постоянного fetch) делаем fetch для получения новых фото
+        if (percentPage >= 90 && !isFetching) {
+          isFetching = true;
+          currentPage++;
+          // Если произойдет ошибка ...
+          try {
+            // Создание fetch запроса для получения фото для текущей страницы
+            const data = await fetchPhotos(currentPage);
+            addPhotosInHTML(data);
+          } catch (error) {
+            // ... выведи ошибку в alert
+            alert(error.message);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

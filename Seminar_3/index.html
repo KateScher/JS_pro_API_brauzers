@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <select id="category-list">
+      <option value="all" selected>Все товары</option>
+      <option value="Электроника">Электроника</option>
+      <option value="Бытовая техника">Бытовая техника</option>
+      <option value="Книги">Книги</option>
+      <option value="Одежда">Одежда</option>
+      <option value="Мебель">Мебель</option>
+    </select>
+    <div class="products"></div>
+    <script>
+      /*
+              Задача 1.
+      Дан массив товаров:
+      Вы разрабатываете интернет-магазин и хотите добавить функциональность динамической фильтрации товаров по категориям. У вас есть форма с выпадающим списком (select), в котором пользователь может выбрать категорию товаров, значения необходимо сформировать исходя их имеющихся товаров.
+      При выборе категории товаров, необходимо динамически обновлять  список отображаемых товаров на странице, чтобы пользователь  видел только товары из выбранной категории.
+
+      1. Создайте интерфейс веб-страницы, который включает в себя следующие элементы:
+          a. Выпадающий список (select) с категориями товаров.
+          b. Список товаров, который будет отображать товары в соответствии с выбранной категорией.
+          c. Каждый товар в списке должен содержать название и категорию.
+
+      При выборе категории товаров в выпадающем списке, форма должна следить за изменениями.
+      Динамически обновляйте список товаров на странице, чтобы отображать только товары из выбранной категории.
+      Стилизуйте элементы интерфейса с помощью CSS для улучшения внешнего вида.
+              */
+      const productsData = [
+        {
+          id: 1,
+          name: "Ноутбук",
+          category: "Электроника",
+        },
+        {
+          id: 2,
+          name: "Смартфон",
+          category: "Электроника",
+        },
+        {
+          id: 3,
+          name: "Кофемашина",
+          category: "Бытовая техника",
+        },
+        {
+          id: 4,
+          name: "Фотокамера",
+          category: "Электроника",
+        },
+        {
+          id: 5,
+          name: "Микроволновая печь",
+          category: "Бытовая техника",
+        },
+        {
+          id: 6,
+          name: "Книга",
+          category: "Книги",
+        },
+        {
+          id: 7,
+          name: "Футболка",
+          category: "Одежда",
+        },
+        {
+          id: 8,
+          name: "Шапка",
+          category: "Одежда",
+        },
+        {
+          id: 9,
+          name: "Стул",
+          category: "Мебель",
+        },
+        {
+          id: 10,
+          name: "Стол",
+          category: "Мебель",
+        },
+      ];
+
+      // Отобразим все товары на странице
+      const productsEl = document.querySelector(".products");
+
+      // productHTML содержит HTML в виде строки из массива объектов  productsData
+      const productHTML = createProductsHtml(productsData);
+      // Вставляем строку содержащую HTML на страницу в элемент productsEl
+      productsEl.innerHTML = productHTML;
+
+      // Функция создаёт строку с HTML разметкой из переданного массива объектов
+      function createProductsHtml(products) {
+        return products
+          .map(
+            (product) => `
+              <div data-id=${product.id}>
+                <h3>${product.name}</h3>
+                <p>${product.category}</p>
+                  <button class="add-button">Купить</button>
+                  </div>
+              `
+          )
+          .join("");
+      }
+
+      // Находим <select>
+      const selectEl = document.querySelector("#category-list");
+      // При изменение selectEl происходит фильтрация по категории
+      selectEl.addEventListener("change", () => {
+        // Получение значение атрибута выбранного option в <select>
+        const selectedCategory = selectEl.value; // Электроника
+        const products = getProductsByCategory(selectedCategory); // (3) [{…}, {…}, {…}] Массив объектов по выбранной категории
+        // Создание строки с HTML разметкой отфильтрованных лементов по категори
+        const productHTML = createProductsHtml(products);
+        // Вставка HTML с отфильтрованными элементами по категории
+        productsEl.innerHTML = productHTML;
+      });
+
+      // Функция возвращает массив отфильтрованных объектов или массив всех объектов
+      function getProductsByCategory(category) {
+        // Если выбран атрибут all выбранной категории, то вернуть все объекты
+        if (category === "all") {
+          return productsData;
+        }
+        // Если выбран атрибут другой выбранной категории, то вернуть массив отфильтрованных объектов
+        return productsData.filter((product) => product.category === category);
+      }
+
+      // productsEl.addEventListener('click', ({target}) => {
+      //   if (!target.closest('.add-button')) {
+      //     return;
+      //   } else
+      // }) // недоделана ф-я для добавления кнопки купить всем продуктам через делегирование
+    </script>
+  </body>
+</html>
